@@ -349,13 +349,67 @@ docker logs v2src_save-prospect-handler_1
 
 You've made one of the app features asynchronous by pulling the functionality out of the website, and into a message handler, using the NATS message queue to plumb them together. Performance problems are a great candidate for taking into a modernization program. With asynchronous messaging you can add scalability and performance by targeting a specific feature.
 
-## <a name="task4.0"></a> Task 4.0 Applying this to our
-Now that we have run though how we can set up a service for containers let's look at how we can apply this to our own app. in the ```keymaster``` folder you will find, what should be, a familiar app. First thing you will do is run ```cd keymaster & ant all```
+## <a name="task4.0"></a> Task 4.0 Applying this to our apps
+Now that we have run though how we can set up a service for containers let's look at how we can apply this to our own app. The first thing you will have to do is switch the container environment you are running in. So far we have been serving apps with iis in a windows container because of ASP.Net4.5 constraints. However now that we are in dontet core we are able to take full advantage of the docker features within a linux conatiner so let's try it out!
 
-Once you have your project build successfully you will need to start building out your docker file. create a file named docker file in your keymaster\src\Keymaster folder. Open up the file you just created in your text editor of choice and let's start dockerizing. 
+![linuxify](images/switchdocker.png)
+
+Now that you are linuxified in the ```keymaster``` folder you will find, what should be, a familiar app. First thing you will do is run ```cd keymaster & ant all```
+
+Once you have your project build successfully you will need to start building out your docker file. create a file named docker file in your ```keymaster\src\Keymaster``` folder. Open up the file you just created in your text editor of choice and let's start dockerizing.
+
+From within the file we are going to start with our first directive which is deciding which base image you would like to start with. We need an image that will run project.json and we don't want to worry about installing dotnet so let's grab ```microsoft/dotnet:1.1-sdk-projectjson```
+
+```FROM microsoft/dotnet:1.1-sdk-projectjson```
+
+We want to copy the solution that we currently have and run it from within the container
+```
+COPY . /keymaster
+WORKDIR /keymaster
+```
+
+Then since we are using an older version of Keymaster we have to add environment variables to set our keymaster
+```
+ENV TokensConfiguration:Token:0:Id c23d86cf-0670-4068-95fa-fd41fe4fbeb5
+ENV TokensConfiguration:Token:0:Provider ET_SMC3
+ENV TokensConfiguration:Token:0:Type ET_TRACKING
+ENV TokensConfiguration:Token:0:CarrierScac AACT
+ENV TokensConfiguration:Token:0:Key SuperSecretGui-dPass9f36-01e5ea662f5T
+ENV TokensConfiguration:Token:1:Id 9eda11ae-edd5-49b4-b3b9-b619bbd7171a
+ENV TokensConfiguration:Token:1:Provider ET_SMC3
+ENV TokensConfiguration:Token:1:Type ET_TRACKING
+ENV TokensConfiguration:Token:1:CarrierScac ODFL
+ENV TokensConfiguration:Token:1:Key thisIsAGu-idIP-romisef50-7a0b66eg195T
+```
+
+next we have to expose our service to the world outside the container and then we have to tell dotnet core where you are running your app.
+```
+EXPOSE 5000/tcp
+ENV ASPNETCORE_URLS http://*:5000
+```
+
+Lastly we have to signify our entry point of the app
+```
+ENTRYPOINT /bin/bash -c "dotnet Keymaster.dll"
+```
+
+save all of that up then let's try running it. first you will need to docker build ```docker build . -t BadBadCopyPasta``` after you have built the image let's run it ```docker run BadBadCopyPasta```. When we go to run that image we get an error that we are missing some of our included packages, probably TmsException OH NO!!!!! Since everything isn't being packaged up for us in debug mode we are going to have to publish our app. Since we are lazy we want the publish to build out our docker image as well.
+
+Go ahead and open up your ```project.json``` for keymaster and add this script action
+```
+"scripts": {
+  "postpublish": [
+    "dotnet publish-iis --publish-folder %publish:OutputPath% --framework %publish:FullTargetFramework%",
+    "docker build -t MySweetKeymaster %publish:OutputPath%"
+  ]
+}
+```
+
+Now let's publish this sucker and see how that goes. From your ```keymaster\src\Keymaster``` dir run ```dotnet publish``` your image should now build again. Once that has completed let's spin that image up ```docker run -p 5000:5000 -d MySweetKeymaster```. Once that is up you should be able to make ReST calls out to ```localhost:5000``` with the correct authorization and be able to see your sweet tokens.
+
+YOU SUCCESSFULLY DOCKERIZED KEYMASTER!
+![ITSHAPPENING](https://media.giphy.com/media/rl0FOxdz7CcxO/giphy.gif)
 
 ## Wrap Up
 
-Thank you for taking the time to complete this lab! You now know how to build and run an ASP.NET app using Docker - without needing Visual Studio. You also saw how to take a feature-driven approach to app modernization, breaking code out of a monolith and using Docker to plumb components together. Lastly you used Docker Compose to define and run a distributed solution.
-
-Do try the other Windows labs at DockerCon, and make a note to check out the full lab suite when you get home - there are plenty more Windows walkthroughs at [docker/labs](https://github.com/docker/labs/tree/master/windows) on GitHub.
+Thank you for taking the time to complete this lab! You now know how to build and run an ASP.NET app using Docker - without needing Visual Studio. You also saw how to take a feature-driven approach to app modernization, breaking code out of a monolith and using Docker to plumb components together. You used Docker Compose to define and run a distributed solution. Then you applied some of the skills you just learned from our test app to the keymaster! Now if you are interested why not try containerizing the most reacent iteration of Keymaster yourself??
