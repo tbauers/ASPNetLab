@@ -1,0 +1,11 @@
+﻿{
+    "Keymaster": {
+        "ApplicationContentRoot": "../../src/Keymaster",
+        "ServerAddress": "http://localhost:5000",
+        "Endpoints": {
+            "Host":  "localhost:5000", 
+            "TestAccountResource": "/accounts/someaccount1234",
+            "TokensResource": "/tokens"
+        }
+    }
+}

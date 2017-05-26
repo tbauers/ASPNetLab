@@ -1,0 +1,65 @@
+{
+  "buildOptions": {
+    "emitEntryPoint": true,
+    "preserveCompilationContext": true,
+    "additionalArguments": [ "/ruleset:../../../dotnet-build/stylecop/StyleCopRules.ruleset", "/additionalfile:../../../dotnet-build/stylecop/stylecop.json" ],
+    "xmlDoc": true
+  },
+  "dependencies": {
+    "Microsoft.NETCore.App": {
+      "version": "1.1.0",
+      "type": "platform"
+    },
+    "Microsoft.AspNetCore.Mvc": "1.1.1",
+    "Microsoft.AspNetCore.Routing": "1.1.1",
+    "Microsoft.AspNetCore.Server.IISIntegration": "1.0.0",
+    "Microsoft.AspNetCore.Server.Kestrel": "1.0.1",
+    "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.1.1",
+    "Microsoft.Extensions.Configuration.FileExtensions": "1.1.1",
+    "Microsoft.Extensions.Configuration.Json": "1.1.1",
+    "Microsoft.Extensions.Logging": "1.1.1",
+    "Microsoft.Extensions.Logging.Console": "1.1.0",
+    "Microsoft.Extensions.Logging.Debug": "1.0.0",
+    "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0",
+    "StyleCop.Analyzers": "1.0.0",
+    "Microsoft.Extensions.Configuration.UserSecrets": "1.1.1",
+    "Swashbuckle.AspNetCore": "1.0.0",
+    "EngagedTechnologies.Middleware.Errors": "1.1.0-dev6",
+    "EngagedTechnologies.Exceptions": "0.2.0-dev14",
+    "StackifyMiddleware": "2.0.3"
+  },
+  "frameworks": {
+    "netcoreapp1.1": {
+      "imports": [
+        "dotnet5.6",
+        "portable-net45+win8"
+      ]
+    }
+  },
+  "publishOptions": {
+    "include": [
+      "wwwroot",
+      "**/*.cshtml",
+      "appsettings.json",
+      "web.config",
+      "dockerfile"
+    ]
+  },
+  "runtimeOptions": {
+    "configProperties": {
+      "System.GC.Server": true
+    }
+  },
+  "scripts": {
+    "postpublish": [
+      "dotnet publish-iis --publish-folder %publish:OutputPath% --framework %publish:FullTargetFramework%",
+      "docker build -t tbauers/gatekeeper %publish:OutputPath%"
+    ]
+  },
+  "tools": {
+    "Microsoft.Extensions.SecretManager.Tools": "1.1.0-preview4-final",
+    "Microsoft.AspNetCore.Server.IISIntegration.Tools": "1.1.0-preview4-final"
+  },
+  "userSecretsId": "Keymaster",
+  "version": "0.1.0-*"
+}

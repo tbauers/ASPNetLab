@@ -1,0 +1,18 @@
+FROM microsoft/dotnet:1.1-sdk-projectjson
+COPY . /keymaster
+WORKDIR /keymaster
+ 
+EXPOSE 5000/tcp
+ENV ASPNETCORE_URLS http://*:5000
+ENV TokensConfiguration:Token:0:Id c23d86cf-0670-4068-95fa-fd41fe4fbeb5
+ENV TokensConfiguration:Token:0:Provider ET_SMC3
+ENV TokensConfiguration:Token:0:Type ET_TRACKING
+ENV TokensConfiguration:Token:0:CarrierScac AACT
+ENV TokensConfiguration:Token:0:Key SuperSecretGui-dPass9f3#-dockerland5T
+ENV TokensConfiguration:Token:1:Id 9eda11ae-edd5-49b4-b3b9-b619bbd7171a
+ENV TokensConfiguration:Token:1:Provider ET_SMC3
+ENV TokensConfiguration:Token:1:Type ET_TRACKING
+ENV TokensConfiguration:Token:1:CarrierScac ODFL
+ENV TokensConfiguration:Token:1:Key thisIsAGu-idIP-romisef5#-dockerland5T
+ 
+ENTRYPOINT /bin/bash -c "dotnet Keymaster.dll"
