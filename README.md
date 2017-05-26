@@ -17,7 +17,7 @@ You'll learn how to:
 - Use the Dockerfile and Docker Compose syntax to replace manual deployment documents.
 
 
-> **Difficulty**: Beginner 
+> **Difficulty**: Beginner
 
 > **Time**: Approximately 35 minutes
 
@@ -25,7 +25,7 @@ You'll learn how to:
 >
 > * [Prerequisites](#prerequisites)
 > * [Task 1: Building ASP.NET applications with Docker](#task1)
->   * [Task 1.1: Setting up an ASP.NET build agent in Docker](#task1.1) 
+>   * [Task 1.1: Setting up an ASP.NET build agent in Docker](#task1.1)
 >   * [Task 1.2: Packaging the build agent as a Docker image](#task1.2)
 >   * [Task 1.3: Build the ASP.NET app with the Docker build agent](#task1.3)
 > * [Task 2: Running ASP.NET applications as Docker containers](#task2)
@@ -36,10 +36,11 @@ You'll learn how to:
 >   * [Task 3.1: Breaking the save feature out of the web app](#task3.1)
 >   * [Task 3.2: Implementing the save in a console app](#task3.2)
 >   * [Task 3.3: Running the distributed solution with Docker Compose](#task3.3)
+> * [Task 4: Applying this to our code](#task4.0)
 
 ## Document conventions
 
-When you encounter a phrase in between `<` and `>`  you are meant to substitute in a different value. 
+When you encounter a phrase in between `<` and `>`  you are meant to substitute in a different value.
 
 For instance if you see `$ip = <ip-address>` you would actually type something like `$ip = '10.0.0.4'`
 
@@ -47,7 +48,7 @@ You will be asked to RDP into various servers.
 
 ## <a name="prerequisites"></a>Prerequisites
 
-You need a set of Windows Server 2016 virtual machines running in Azure, which are already configured with Docker and the Windows base images. You do not need Docker running on your laptop, but you will need a Remote Desktop client to connect to the VMs. 
+You need a set of Windows Server 2016 virtual machines running in Azure, which are already configured with Docker and the Windows base images. You do not need Docker running on your laptop, but you will need a Remote Desktop client to connect to the VMs.
 
 - Windows - use the built-in Remote Desktop Connection app.
 - Mac - install [Microsoft Remote Desktop](https://itunes.apple.com/us/app/microsoft-remote-desktop/id715768417?mt=12) from the app store.
@@ -66,10 +67,10 @@ Start by ensuring you have the latest lab source code. RDP into one of your Azur
 ```
 mkdir -p C:\scm\github\docker
 cd C:\scm\github\docker
-git clone https://github.com/docker/dcus-hol-2017.git
+git clone https://github.com/tbauers/ASPNetLab.git
 ```
 
-Now clear up anything left from a previous lab. You only need to do this if you have used this VM for one of the other Windows labs, but you can run it safely to restore Docker to a clean state. 
+Now clear up anything left from a previous lab. You only need to do this if you have used this VM for one of the other Windows labs, but you can run it safely to restore Docker to a clean state.
 
 This stops and removes all running containers, and then leaves the swarm - ignore any error messages you see:
 
@@ -86,6 +87,8 @@ The application for this lab is an ASP.NET WebForms app, which showcases a produ
 
 The source code is in a [Visual Studio 2015 solution file](v1-src/ProductLaunch/ProductLaunch.sln), but you don't need Visual Studio to build the application. You'll start by building a build agent in Docker, so anyone can build and run the app from source, just using Docker.
 
+We plan on dockerizing a test app then our own Keymaster App!
+
 
 ## <a name="task1.1"></a> Task 1.1: Setting up an ASP.NET build agent in Docker
 
@@ -94,7 +97,7 @@ All the parts of MSBuild which you need for different project types are availabl
 Have a look at the [Dockerfile](v1-src/docker/builder/Dockerfile) for the build agent. It's a simple example with a few things to note:
 
 - `FROM` specifies Windows Server Core as the base image. You need the .NET Framework, so you can't use Nano Server as the base
-- first `RUN` installs Chocolatey as a NuGet package provider, and then installs all the MSBuild tools - including the .NET 4.5 targeting pack, and WebDeploy for publishing the ASP.NET app 
+- first `RUN` installs Chocolatey as a NuGet package provider, and then installs all the MSBuild tools - including the .NET 4.5 targeting pack, and WebDeploy for publishing the ASP.NET app
 - second `RUN` installs the the Visual Studio web targets, for actually building the `.csproj`.
 
 Explicit versions are specified for all the installs, so this is a repeatable Dockerfile - it will always produce the same build agent with the same set of components.
@@ -103,7 +106,7 @@ The [ENTRYPOINT](https://docs.docker.com/engine/reference/builder/#entrypoint) i
 
 ## <a name="task1.2"></a> Task 1.2: Packaging the build agent as a Docker image
 
-The build agent is generic, it can be used to compile any .NET 4.5 web projects. You could add more targeting packs from NuGet in the Dockerfile if you want to support different .NET versions. 
+The build agent is generic, it can be used to compile any .NET 4.5 web projects. You could add more targeting packs from NuGet in the Dockerfile if you want to support different .NET versions.
 
 To build the image, change to the builder directory and build the Dockerfile:
 
@@ -118,7 +121,7 @@ Now you have a Docker image for building the app, which you can share on a publi
 
 ## <a name="task1.3"></a> Task 1.3: Build the ASP.NET app with the Docker build agent
 
-With the builder image you can build any ASP.NET application, you just need to prepare a `docker run` command which mounts the host directories into the container and specifies the MSBuild script to run. 
+With the builder image you can build any ASP.NET application, you just need to prepare a `docker run` command which mounts the host directories into the container and specifies the MSBuild script to run.
 
 The [build.ps1](v1-src/ProductLaunch/build.ps1) script for version 1 of the app is very simple, it just builds the web project from the expected source location, and publishes to the expected output location. On your lab VM, change to the `v1-src` directory and run a container to build the web app:
 
@@ -129,7 +132,7 @@ docker run --rm `
  -v $pwd\ProductLaunch:c:\src `
  -v $pwd\docker:c:\out `
  <DockerID>/modernize-aspnet-builder `
- C:\src\build.ps1 
+ C:\src\build.ps1
 ```
 
 That command runs a container from the generic ASP.NET builder image with the following configuration:
@@ -144,7 +147,7 @@ You'll see all the familiar output from MSBuild while the container is running. 
 ls .\docker\web
 ```
 
-You should see a new folder called `ProductLaunchWeb`, which contains the published website. 
+You should see a new folder called `ProductLaunchWeb`, which contains the published website.
 
 ## <a name="task2"></a>Task 2: Running ASP.NET applications as Docker containers
 
@@ -157,7 +160,7 @@ To package the ASP.NET application to run in Docker you'll use a Dockerfile that
 - copies the application content from the published build
 - configures the application as an IIS website
 
-You should package your applications individually, with a single ASP.NET app in each image. That lets you deploy, scale and upgrade your applications separately. If you have many ASP.NET apps with similar configurations, all your Dockerfiles will be broadly the same. The content for each app will change, and some may need additional setup, but there will be a lot of commonality. 
+You should package your applications individually, with a single ASP.NET app in each image. That lets you deploy, scale and upgrade your applications separately. If you have many ASP.NET apps with similar configurations, all your Dockerfiles will be broadly the same. The content for each app will change, and some may need additional setup, but there will be a lot of commonality.
 
 ## <a name="task2.1"></a>Task 2.1: Packaging ASP.NET apps as Docker images
 
@@ -268,7 +271,7 @@ var eventMessage = new ProspectSignedUpEvent
 MessageQueue.Publish(eventMessage);
 ```
 
-The `ProspectSignedUpEvent` contains a `Prospect` object, populated from the webform input. The `MessageQueue` class is just a wrapper to abstract the type of message queue. In this lab you'll be using [NATS](https://nats.io), a high-performance, low-latency, cross-platform and open-source message server. 
+The `ProspectSignedUpEvent` contains a `Prospect` object, populated from the webform input. The `MessageQueue` class is just a wrapper to abstract the type of message queue. In this lab you'll be using [NATS](https://nats.io), a high-performance, low-latency, cross-platform and open-source message server.
 
 NATS is available as an [official image](https://hub.docker.com/_/nats/) on Docker Hub, which means it's a curated image that you can rely on for quality. Publishing a Message to NATS means multiple subscribers can listen for the event, and you start to bring [event-driven architecture](https://msdn.microsoft.com/en-us/library/dd129913.aspx) into the application - just for the one feature that needs it, without a full rewrite of the app.
 
@@ -293,7 +296,7 @@ using (var context = new ProductLaunchContext())
 
 That's the exact same code that was in the web form in version 1. This is a common pattern that applies for any features which are resource-bound and need to scale well. You extract the functionality from the synchronous implementation, and publish a message instead. Then you move the extracted code to a message handler - this is a simple example, but if you have a complex function with multiple external dependencies, the practice is exactly the same.
 
-The message handler will run in a Docker container too. The [Dockerfile](v2-src/docker/save-handler/Dockerfile) is very simple. .NET is already installed in the `microsoft/windowsservercore` base image, so the Dockerfile just configures the DNS cache, sets the default message queue URL in an environment variable and copies in the compiled console app. 
+The message handler will run in a Docker container too. The [Dockerfile](v2-src/docker/save-handler/Dockerfile) is very simple. .NET is already installed in the `microsoft/windowsservercore` base image, so the Dockerfile just configures the DNS cache, sets the default message queue URL in an environment variable and copies in the compiled console app.
 
 
 ## <a name="task3.3"></a> Task 3.3: Running the distributed solution with Docker Compose
@@ -345,6 +348,11 @@ docker logs v2src_save-prospect-handler_1
 ```
 
 You've made one of the app features asynchronous by pulling the functionality out of the website, and into a message handler, using the NATS message queue to plumb them together. Performance problems are a great candidate for taking into a modernization program. With asynchronous messaging you can add scalability and performance by targeting a specific feature.
+
+## <a name="task4.0"></a> Task 4.0 Applying this to our
+Now that we have run though how we can set up a service for containers let's look at how we can apply this to our own app. in the ```keymaster``` folder you will find, what should be, a familiar app. First thing you will do is run ```cd keymaster & ant all```
+
+Once you have your project build successfully you will need to start building out your docker file. create a file named docker file in your keymaster\src\Keymaster folder. Open up the file you just created in your text editor of choice and let's start dockerizing. 
 
 ## Wrap Up
 

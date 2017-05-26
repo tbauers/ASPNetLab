@@ -25,8 +25,7 @@
     "Microsoft.Extensions.Configuration.UserSecrets": "1.1.1",
     "Swashbuckle.AspNetCore": "1.0.0",
     "EngagedTechnologies.Middleware.Errors": "1.1.0-dev6",
-    "EngagedTechnologies.Exceptions": "0.2.0-dev14",
-    "StackifyMiddleware": "2.0.3"
+    "EngagedTechnologies.Exceptions": "0.2.0-dev14"
   },
   "frameworks": {
     "netcoreapp1.1": {

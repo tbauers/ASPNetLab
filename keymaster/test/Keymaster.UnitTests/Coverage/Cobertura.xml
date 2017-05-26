@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
-<coverage line-rate="0.476190476190476" branch-rate="0.5" lines-covered="60" lines-valid="126" branches-covered="10" branches-valid="20" complexity="0" version="0" timestamp="1495807272">
+<coverage line-rate="0.413793103448276" branch-rate="0.384615384615385" lines-covered="60" lines-valid="145" branches-covered="10" branches-valid="26" complexity="0" version="0" timestamp="1495812261">
   <sources>
     <source>src</source>
   </sources>
   <packages>
-    <package name="Keymaster" line-rate="0.476190476190476" branch-rate="0.5" complexity="0">
+    <package name="Keymaster" line-rate="0.413793103448276" branch-rate="0.384615384615385" complexity="0">
       <classes>
         <class name="Keymaster.Accessor.KeymasterAccessor" filename="C:\Playground\ASPNetLab\keymaster\src\Keymaster\Accessor\KeymasterAccessor.cs" line-rate="1" branch-rate="1" complexity="0">
           <methods>
@@ -155,6 +155,76 @@
             <line number="22" hits="0" branch="false" />
           </lines>
         </class>
+        <class name="Keymaster.Logger.LogAdapter" filename="C:\Playground\ASPNetLab\keymaster\src\Keymaster\Logger\LogAdapter.cs" line-rate="0" branch-rate="0" complexity="0">
+          <methods>
+            <method name=".ctor" signature="(Microsoft.Extensions.Options.IOptions`1&lt;Keymaster.Logger.LogAdapterConfiguration&gt;)" line-rate="0" branch-rate="1">
+              <lines>
+                <line number="22" hits="0" branch="false" />
+                <line number="23" hits="0" branch="false" />
+                <line number="24" hits="0" branch="false" />
+                <line number="25" hits="0" branch="false" />
+              </lines>
+            </method>
+            <method name="LogAsync" signature="(Keymaster.Logger.LogItem)" line-rate="0" branch-rate="0">
+              <lines>
+                <line number="28" hits="0" branch="false" />
+                <line number="29" hits="0" branch="true" condition-coverage="0% (0/2)" />
+                <line number="30" hits="0" branch="true" condition-coverage="0% (0/2)" />
+                <line number="32" hits="0" branch="false" />
+                <line number="33" hits="0" branch="false" />
+                <line number="35" hits="0" branch="true" condition-coverage="0% (0/2)" />
+                <line number="36" hits="0" branch="false" />
+                <line number="37" hits="0" branch="false" />
+                <line number="39" hits="0" branch="false" />
+                <line number="43" hits="0" branch="false" />
+                <line number="45" hits="0" branch="false" />
+                <line number="46" hits="0" branch="false" />
+                <line number="47" hits="0" branch="false" />
+                <line number="48" hits="0" branch="false" />
+                <line number="49" hits="0" branch="false" />
+                <line number="51" hits="0" branch="false" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="22" hits="0" branch="false" />
+            <line number="23" hits="0" branch="false" />
+            <line number="24" hits="0" branch="false" />
+            <line number="25" hits="0" branch="false" />
+            <line number="28" hits="0" branch="false" />
+            <line number="29" hits="0" branch="true" condition-coverage="0% (0/2)" />
+            <line number="30" hits="0" branch="true" condition-coverage="0% (0/2)" />
+            <line number="32" hits="0" branch="false" />
+            <line number="33" hits="0" branch="false" />
+            <line number="35" hits="0" branch="true" condition-coverage="0% (0/2)" />
+            <line number="36" hits="0" branch="false" />
+            <line number="37" hits="0" branch="false" />
+            <line number="39" hits="0" branch="false" />
+            <line number="43" hits="0" branch="false" />
+            <line number="45" hits="0" branch="false" />
+            <line number="46" hits="0" branch="false" />
+            <line number="47" hits="0" branch="false" />
+            <line number="48" hits="0" branch="false" />
+            <line number="49" hits="0" branch="false" />
+            <line number="51" hits="0" branch="false" />
+          </lines>
+        </class>
+        <class name="Keymaster.Logger.LogAdapterConfiguration" filename="C:\Playground\ASPNetLab\keymaster\src\Keymaster\Logger\LogAdapterConfiguration.cs" line-rate="1" branch-rate="1" complexity="0">
+          <methods>
+            <method name=".ctor" signature="()" line-rate="1" branch-rate="1">
+              <lines />
+            </method>
+          </methods>
+          <lines />
+        </class>
+        <class name="Keymaster.Logger.LogItem" filename="C:\Playground\ASPNetLab\keymaster\src\Keymaster\Logger\LogItem.cs" line-rate="1" branch-rate="1" complexity="0">
+          <methods>
+            <method name=".ctor" signature="()" line-rate="1" branch-rate="1">
+              <lines />
+            </method>
+          </methods>
+          <lines />
+        </class>
         <class name="Keymaster.Middleware.TmsAuthenticationMiddleware" filename="C:\Playground\ASPNetLab\keymaster\src\Keymaster\Middleware\TmsAuthenticationMiddleware.cs" line-rate="0" branch-rate="0" complexity="0">
           <methods>
             <method name=".ctor" signature="(Microsoft.AspNetCore.Http.RequestDelegate)" line-rate="0" branch-rate="1">
@@ -232,6 +302,38 @@
           <lines />
         </class>
         <class name="Keymaster.Model.External.TokenItem" filename="C:\Playground\ASPNetLab\keymaster\src\Keymaster\Model\External\TokenItem.cs" line-rate="1" branch-rate="1" complexity="0">
+          <methods>
+            <method name=".ctor" signature="()" line-rate="1" branch-rate="1">
+              <lines />
+            </method>
+          </methods>
+          <lines />
+        </class>
+        <class name="Keymaster.Model.Internal.AzureSecretAttributesResponse" filename="C:\Playground\ASPNetLab\keymaster\src\Keymaster\Model\Internal\AzureSecretAttributesResponse.cs" line-rate="1" branch-rate="1" complexity="0">
+          <methods>
+            <method name=".ctor" signature="()" line-rate="1" branch-rate="1">
+              <lines />
+            </method>
+          </methods>
+          <lines />
+        </class>
+        <class name="Keymaster.Model.Internal.AzureSecretResponse" filename="C:\Playground\ASPNetLab\keymaster\src\Keymaster\Model\Internal\AzureSecretResponse.cs" line-rate="1" branch-rate="1" complexity="0">
+          <methods>
+            <method name=".ctor" signature="()" line-rate="1" branch-rate="1">
+              <lines />
+            </method>
+          </methods>
+          <lines />
+        </class>
+        <class name="Keymaster.Model.Internal.AzureTokenResponse" filename="C:\Playground\ASPNetLab\keymaster\src\Keymaster\Model\Internal\AzureTokenResponse.cs" line-rate="1" branch-rate="1" complexity="0">
+          <methods>
+            <method name=".ctor" signature="()" line-rate="1" branch-rate="1">
+              <lines />
+            </method>
+          </methods>
+          <lines />
+        </class>
+        <class name="Keymaster.Model.Internal.SecretStoreItem" filename="C:\Playground\ASPNetLab\keymaster\src\Keymaster\Model\Internal\SecretStoreItem.cs" line-rate="1" branch-rate="1" complexity="0">
           <methods>
             <method name=".ctor" signature="()" line-rate="1" branch-rate="1">
               <lines />
@@ -344,11 +446,10 @@
               <lines>
                 <line number="88" hits="0" branch="false" />
                 <line number="89" hits="0" branch="false" />
-                <line number="90" hits="0" branch="false" />
-                <line number="93" hits="0" branch="false" />
-                <line number="96" hits="0" branch="false" />
+                <line number="92" hits="0" branch="false" />
+                <line number="95" hits="0" branch="false" />
+                <line number="100" hits="0" branch="false" />
                 <line number="101" hits="0" branch="false" />
-                <line number="102" hits="0" branch="false" />
               </lines>
             </method>
           </methods>
@@ -375,11 +476,10 @@
             <line number="85" hits="0" branch="false" />
             <line number="88" hits="0" branch="false" />
             <line number="89" hits="0" branch="false" />
-            <line number="90" hits="0" branch="false" />
-            <line number="93" hits="0" branch="false" />
-            <line number="96" hits="0" branch="false" />
+            <line number="92" hits="0" branch="false" />
+            <line number="95" hits="0" branch="false" />
+            <line number="100" hits="0" branch="false" />
             <line number="101" hits="0" branch="false" />
-            <line number="102" hits="0" branch="false" />
           </lines>
         </class>
         <class name="Keymaster.Transformer.InternalTokensToExternalTokenCollection" filename="C:\Playground\ASPNetLab\keymaster\src\Keymaster\Transformer\InternalTokensToExternalTokenCollection.cs" line-rate="1" branch-rate="1" complexity="0">

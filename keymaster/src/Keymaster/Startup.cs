@@ -86,7 +86,6 @@ namespace Keymaster
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            app.UseMiddleware<StackifyMiddleware.RequestTracerMiddleware>();
             app.UseMiddleware<TmsAuthenticationMiddleware>();
 
             // Enable middleware to serve generated Swagger as a JSON endpoint
