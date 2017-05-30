@@ -117,6 +117,13 @@ docker build -t <DockerID>/modernize-aspnet-builder .
 
 The output from `docker build` shows you the Docker engine executing all the steps in the Dockerfile. On your lab VM the base images have already been pulled, but the installations from Chocolatey will take a couple of minutes.
 
+We could do this locally but the install of all the build stuff we need takes a bit of extra time. Instead let's just pull a completed image:
+```
+docker pull dockersamples/modernize-aspnet-builder
+```
+
+we will use this image instead of our own for the remainder of the course.
+
 Now you have a Docker image for building the app, which you can share on a public or private registry. Anyone who joins the team can use that image to build the app - and the same image can be used in the CI build, so you don't need to install Visual Studio on the build server.
 
 ## <a name="task1.3"></a> Task 1.3: Build the ASP.NET app with the Docker build agent
@@ -128,11 +135,7 @@ The [build.ps1](v1-src/ProductLaunch/build.ps1) script for version 1 of the app 
 ```
 cd C:\scm\github\docker\dcus-hol-2017\windows-modernize-aspnet-dev\v1-src
 
-docker run --rm `
- -v $pwd\ProductLaunch:c:\src `
- -v $pwd\docker:c:\out `
- <DockerID>/modernize-aspnet-builder `
- C:\src\build.ps1
+docker run --rm -v $pwd\ProductLaunch:c:\src -v $pwd\docker:c:\out dockersamples/modernize-aspnet-builder C:\src\build.ps1
 ```
 
 That command runs a container from the generic ASP.NET builder image with the following configuration:
@@ -233,6 +236,13 @@ If you run `docker container ls` now, you'll see two containers - one running SQ
 The web container publishes port 80 to the host so you can access the website externally. On your laptop browse to the address of the lab VM and you'll see the product launch website:
 
 ![Product launch v1 website](images/app-v1.png)
+
+Since we are doing things a bit differently from the lab you will need to run this command to find the IP of your container so you can travel to your web app.
+```
+docker inspect --format="{{.NetworkSettings.Networks.nat.IPAddress}}" web
+```
+
+You should be able to travel to the IP supplied and see the equivalent page in the picture.
 
 Go ahead and click the "Sign Up" button. The form you see is reading the drop-down values from SQL Server. The web app uses Entity Framework code-first to create the schema and write seed data. Fill out the form and click the "Go" button - that makes a synchronous call to SQL Server to insert your data.
 
@@ -408,6 +418,7 @@ Go ahead and open up your ```project.json``` for keymaster and add this script a
 Now let's publish this sucker and see how that goes. From your ```keymaster\src\Keymaster``` dir run ```dotnet publish``` your image should now build again. Once that has completed let's spin that image up ```docker run -p 5000:5000 -d MySweetKeymaster```. Once that is up you should be able to make ReST calls out to ```localhost:5000``` with the correct authorization and be able to see your sweet tokens.
 
 YOU SUCCESSFULLY DOCKERIZED KEYMASTER!
+
 ![ITSHAPPENING](https://media.giphy.com/media/rl0FOxdz7CcxO/giphy.gif)
 
 ## Wrap Up

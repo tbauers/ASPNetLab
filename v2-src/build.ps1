@@ -4,14 +4,10 @@ Param(
    [string] $dockerID
 )
 
-docker build `
- -t $dockerID/modernize-aspnet-builder `
- $pwd\docker\builder
-
 docker run --rm `
  -v $pwd\ProductLaunch:c:\src `
  -v $pwd\docker:c:\out `
- $dockerID/modernize-aspnet-builder `
+ dockersamples/modernize-aspnet-builder `
  C:\src\build.ps1 
 
 docker build `
